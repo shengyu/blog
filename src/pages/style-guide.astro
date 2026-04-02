@@ -1,0 +1,189 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const colorTokens = [
+  { name: "--color-canvas", value: "#f4efe6", use: "Base page background" },
+  { name: "--color-surface", value: "#fffaf2", use: "Solid cards and panels" },
+  { name: "--color-ink", value: "#181611", use: "Primary text" },
+  { name: "--color-ink-muted", value: "#5b5648", use: "Secondary text" },
+  { name: "--color-accent", value: "#0f766e", use: "Primary action color" },
+  {
+    name: "--color-accent-strong",
+    value: "#115e59",
+    use: "Hover and active accent states",
+  },
+  { name: "--color-warm", value: "#c46b45", use: "Supporting emphasis color" },
+  { name: "--color-line", value: "rgba(24, 22, 17, 0.12)", use: "Dividers" },
+];
+
+const typeTokens = [
+  { name: "--text-xs", value: "0.75rem", use: "Labels and metadata" },
+  { name: "--text-sm", value: "0.875rem", use: "Small UI text" },
+  { name: "--text-base", value: "1rem", use: "Default body text" },
+  { name: "--text-lg", value: "1.125rem", use: "Lead copy" },
+  { name: "--text-xl", value: "1.25rem", use: "Card titles" },
+  { name: "--text-2xl", value: "1.5rem", use: "Section headings" },
+  { name: "--text-3xl", value: "2rem", use: "Article headings" },
+  { name: "--text-4xl", value: "2.75rem", use: "Page headers" },
+  { name: "--text-5xl", value: "3.5rem", use: "Hero headings" },
+];
+
+const spacingTokens = [
+  { name: "--space-1", value: "0.25rem" },
+  { name: "--space-2", value: "0.5rem" },
+  { name: "--space-3", value: "0.75rem" },
+  { name: "--space-4", value: "1rem" },
+  { name: "--space-5", value: "1.5rem" },
+  { name: "--space-6", value: "2rem" },
+  { name: "--space-7", value: "3rem" },
+  { name: "--space-8", value: "4rem" },
+  { name: "--space-9", value: "6rem" },
+  { name: "--space-10", value: "8rem" },
+];
+
+const semanticTokens = [
+  { name: "--background", value: "var(--color-canvas)", use: "App background" },
+  {
+    name: "--surface",
+    value: "var(--color-surface-elevated)",
+    use: "Translucent panels",
+  },
+  {
+    name: "--surface-strong",
+    value: "var(--color-surface)",
+    use: "Solid cards",
+  },
+  { name: "--text", value: "var(--color-ink)", use: "Default foreground" },
+  {
+    name: "--text-muted",
+    value: "var(--color-ink-muted)",
+    use: "Secondary copy",
+  },
+  { name: "--accent", value: "var(--color-accent)", use: "Primary CTA color" },
+  {
+    name: "--focus-ring",
+    value: "0 0 0 3px rgba(15, 118, 110, 0.28)",
+    use: "Keyboard focus",
+  },
+];
+---
+
+<BaseLayout
+  title="Style guide | Blog"
+  description="Documented color tokens, typography scale, spacing rules, and UI token values for the blog."
+>
+  <section class="hero">
+    <p class="eyebrow">Brand foundation</p>
+    <h1>Style guide</h1>
+    <p class="lede">
+      This page documents the reusable token set that powers the blog's visual
+      identity. The same values live in <code>src/styles/global.css</code> and
+      are applied across home, listing, and article pages.
+    </p>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Color palette</p>
+      <h2>Primary and secondary colors</h2>
+    </div>
+    <div class="swatch-grid" aria-label="Color tokens">
+      {colorTokens.map((token) => (
+        <article class="swatch">
+          <div
+            class="swatch-color"
+            style={`background: ${token.value};`}
+            aria-hidden="true"
+          />
+          <div class="swatch-body">
+            <strong>{token.name}</strong>
+            <p class="token-value">{token.value}</p>
+            <p>{token.use}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Typography</p>
+      <h2>Font pairing and scale</h2>
+    </div>
+    <div class="style-guide-grid columns-2">
+      <article class="card">
+        <p class="token-chip">Display family</p>
+        <h3 style={`font-family: var(--font-display); font-size: var(--text-4xl);`}>
+          Editorial headings
+        </h3>
+        <p>
+          <code>--font-display</code> is used for page titles, article headings,
+          and other brand-forward moments.
+        </p>
+      </article>
+      <article class="card">
+        <p class="token-chip">Body family</p>
+        <p style={`font-family: var(--font-body); font-size: var(--text-lg);`}>
+          The body stack is a humanist sans that keeps navigation, copy, and UI
+          elements readable on every page.
+        </p>
+      </article>
+    </div>
+
+    <div class="token-list" style="margin-top: var(--space-5);">
+      {typeTokens.map((token) => (
+        <div class="token-row">
+          <strong>{token.name}</strong>
+          <div class="scale-row" style={`border-bottom: 0; padding: 0;`}>
+            <span style={`font-size: ${token.value}; font-family: var(--font-display);`}>
+              Aa
+            </span>
+            <span>{token.value}</span>
+            <span>{token.use}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Spacing</p>
+      <h2>Geometric spacing scale</h2>
+    </div>
+    <div class="token-list">
+      {spacingTokens.map((token, index) => (
+        <div class="token-row">
+          <strong>{token.name}</strong>
+          <div class="scale-row" style={`border-bottom: 0; padding: 0;`}>
+            <span class="space-bar" style={`width: calc(${token.value} * 12);`} />
+            <span>{token.value}</span>
+            <span>{index === 3 ? "Base unit" : "Layout and component spacing"}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+    <p style="margin-top: var(--space-4);">
+      Use <code>--space-4</code> as the default unit and scale up for layout
+      separation, section padding, and roomy containers.
+    </p>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Core UI tokens</p>
+      <h2>Semantic application values</h2>
+    </div>
+    <div class="token-list">
+      {semanticTokens.map((token) => (
+        <div class="token-row">
+          <strong>{token.name}</strong>
+          <div class="scale-row" style={`border-bottom: 0; padding: 0;`}>
+            <span>{token.value}</span>
+            <span>{token.use}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
