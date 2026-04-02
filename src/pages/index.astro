@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (left, right) =>
+    new Date(right.data.publishDate).getTime() -
+    new Date(left.data.publishDate).getTime(),
+);
+const latestPost = posts[0];
+---
+
+<BaseLayout
+  title="Home | Blog"
+  description="A static-first Astro blog scaffold with repository-managed posts."
+>
+  <section class="hero">
+    <p class="eyebrow">Static-first publishing</p>
+    <h1>Initial blog scaffold</h1>
+    <p class="lede">
+      This project is ready for Astro page development, Markdown-backed posts,
+      and test wiring with Vitest plus Playwright.
+    </p>
+    <div class="actions">
+      <a class="button" href="/blog/">Browse posts</a>
+    </div>
+  </section>
+
+  {latestPost && (
+    <section class="section-stack">
+      <div class="section-heading">
+        <p class="eyebrow">Latest post</p>
+        <h2>{latestPost.data.title}</h2>
+      </div>
+      <article class="card">
+        <p class="meta">{latestPost.data.publishDate}</p>
+        <p>{latestPost.data.description}</p>
+        <a href={`/blog/${latestPost.data.slug}/`}>Read the article</a>
+      </article>
+    </section>
+  )}
+</BaseLayout>

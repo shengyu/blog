@@ -33,3 +33,13 @@ Thumbs.db
 *.swp
 *.swo
 *.tmp
+
+# Node and Astro build output
+node_modules/
+.astro/
+dist/
+coverage/
+
+# Playwright artifacts
+playwright-report/
+test-results/
