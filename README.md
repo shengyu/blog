@@ -1,5 +1,11 @@
 # Blog
 
+## Technology Stack
+
+The project uses one selected stack for version 1: `Node.js LTS`, `Astro`, `pnpm`, plain scoped CSS, and `Vitest` plus `Playwright`.
+
+See [docs/setup.md](docs/setup.md) for the recorded decision and implementation direction.
+
 ## Core Blog Functionalities
 
 The initial blog release must support the `Required` items below. `Optional` items may be added later without blocking launch. `Out of scope` items are not part of the current core blog functionality.

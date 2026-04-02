@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Framework and build output
+.astro/
+dist/
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Package manager logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.idea/
+.vscode/
+
+# Swap and temp files
+*.swp
+*.swo
+*.tmp
