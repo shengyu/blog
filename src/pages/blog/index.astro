@@ -1,12 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { listBlogPosts } from "../../lib/blog-post-storage";
 
-const posts = (await getCollection("blog")).sort(
-  (left, right) =>
-    new Date(right.data.publishDate).getTime() -
-    new Date(left.data.publishDate).getTime(),
-);
+const posts = await listBlogPosts();
 ---
 
 <BaseLayout
@@ -18,17 +14,17 @@ const posts = (await getCollection("blog")).sort(
       <p class="eyebrow">Archive</p>
       <h1>Blog posts</h1>
       <p class="lede">
-        Posts are stored in the repository and rendered at build time.
+        Posts are loaded through the blog storage layer and rendered at build time.
       </p>
     </div>
 
     <div class="card-grid">
       {posts.map((post) => (
         <article class="card">
-          <p class="meta">{post.data.publishDate}</p>
-          <h2>{post.data.title}</h2>
-          <p>{post.data.description}</p>
-          <a href={`/blog/${post.data.slug}/`}>Read the article</a>
+          <p class="meta">{post.publishDate}</p>
+          <h2>{post.title}</h2>
+          <p>{post.description}</p>
+          <a href={`/blog/${post.slug}/`}>Read the article</a>
         </article>
       ))}
     </div>

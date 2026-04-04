@@ -1,12 +1,8 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { listBlogPosts } from "../lib/blog-post-storage";
 
-const posts = (await getCollection("blog")).sort(
-  (left, right) =>
-    new Date(right.data.publishDate).getTime() -
-    new Date(left.data.publishDate).getTime(),
-);
+const posts = await listBlogPosts();
 const latestPost = posts[0];
 ---
 
@@ -30,12 +26,12 @@ const latestPost = posts[0];
     <section class="section-stack">
       <div class="section-heading">
         <p class="eyebrow">Latest post</p>
-        <h2>{latestPost.data.title}</h2>
+        <h2>{latestPost.title}</h2>
       </div>
       <article class="card">
-        <p class="meta">{latestPost.data.publishDate}</p>
-        <p>{latestPost.data.description}</p>
-        <a href={`/blog/${latestPost.data.slug}/`}>Read the article</a>
+        <p class="meta">{latestPost.publishDate}</p>
+        <p>{latestPost.description}</p>
+        <a href={`/blog/${latestPost.slug}/`}>Read the article</a>
       </article>
     </section>
   )}

@@ -1,32 +1,38 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-interface Props {
-  post: CollectionEntry<"blog">;
-}
+import { listBlogPosts, loadBlogPost } from "../../lib/blog-post-storage";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await listBlogPosts();
 
   return posts.map((post) => ({
-    params: { slug: post.data.slug },
-    props: { post },
+    params: { slug: post.slug },
   }));
 }
 
-const { post } = Astro.props;
+const slug = Astro.params.slug;
+
+if (!slug) {
+  throw new Error("Missing blog post slug.");
+}
+
+const post = await loadBlogPost(slug);
+
+if (!post) {
+  throw new Error(`Could not find blog post with slug "${slug}".`);
+}
+
 const { Content } = await post.render();
 ---
 
 <BaseLayout
-  title={`${post.data.title} | Blog`}
-  description={post.data.description}
+  title={`${post.title} | Blog`}
+  description={post.description}
 >
   <article class="post">
-    <p class="meta">{post.data.publishDate}</p>
-    <h1>{post.data.title}</h1>
-    <p class="lede">{post.data.description}</p>
+    <p class="meta">{post.publishDate}</p>
+    <h1>{post.title}</h1>
+    <p class="lede">{post.description}</p>
     <Content />
   </article>
 </BaseLayout>

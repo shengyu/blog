@@ -1,6 +1,35 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+const componentStates = {
+  buttons: [
+    { variant: "Primary", class: "button", text: "Primary action" },
+    { variant: "Secondary", class: "button button-secondary", text: "Secondary" },
+    { variant: "Warm", class: "button button-warm", text: "Warm accent" },
+    { variant: "Ghost", class: "button button-ghost", text: "Ghost button" },
+    { variant: "Small", class: "button button-sm", text: "Small" },
+    { variant: "With icon", class: "button", text: "→ Icon button" },
+  ],
+  tags: [
+    { variant: "Default", class: "tag", text: "Technology" },
+    { variant: "Accent", class: "tag tag-accent", text: "Featured" },
+    { variant: "Warm", class: "tag tag-warm", text: "Popular" },
+    { variant: "Outline", class: "tag tag-outline", text: "Draft" },
+  ],
+  callouts: [
+    { variant: "Info", class: "callout", title: "Information", text: "This is an informational callout for helpful context and tips." },
+    { variant: "Success", class: "callout callout-success", title: "Success", text: "Operation completed successfully. Your changes have been saved." },
+    { variant: "Warning", class: "callout callout-warning", title: "Warning", text: "Please review your settings before continuing." },
+    { variant: "Error", class: "callout callout-error", title: "Error", text: "Something went wrong. Please try again later." },
+  ],
+  cards: [
+    { variant: "Default", class: "card", title: "Standard Card", description: "Default card style used throughout the interface." },
+    { variant: "Featured", class: "card card-featured", title: "Featured Card", description: "Highlighted card for important content with accent border." },
+    { variant: "Warm", class: "card card-warm", title: "Warm Card", description: "Card with warm accent styling for promotional content." },
+    { variant: "Muted", class: "card card-muted", title: "Muted Card", description: "Subdued card style for secondary information." },
+  ],
+};
+
 const colorTokens = [
   { name: "--color-canvas", value: "#f4efe6", use: "Base page background" },
   { name: "--color-surface", value: "#fffaf2", use: "Solid cards and panels" },
@@ -184,6 +213,167 @@ const semanticTokens = [
           </div>
         </div>
       ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Components</p>
+      <h2>Buttons</h2>
+    </div>
+    <p class="section-description">Action buttons with consistent styling across all interaction states.</p>
+    <div class="component-showcase">
+      {componentStates.buttons.map((btn) => (
+        <div class="showcase-item">
+          <span class="showcase-label">{btn.variant}</span>
+          <button class={btn.class}>{btn.text}</button>
+        </div>
+      ))}
+    </div>
+    <div class="showcase-row" style="margin-top: var(--space-6);">
+      <div class="showcase-item">
+        <span class="showcase-label">Disabled states</span>
+        <div class="button-row">
+          <button class="button" disabled>Primary disabled</button>
+          <button class="button button-secondary" disabled>Secondary disabled</button>
+          <button class="button button-ghost" disabled>Ghost disabled</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Components</p>
+      <h2>Tags</h2>
+    </div>
+    <p class="section-description">Compact labels for categorization and status indication.</p>
+    <div class="component-showcase">
+      {componentStates.tags.map((tag) => (
+        <div class="showcase-item">
+          <span class="showcase-label">{tag.variant}</span>
+          <span class={tag.class}>{tag.text}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Components</p>
+      <h2>Cards</h2>
+    </div>
+    <p class="section-description">Content containers with various emphasis levels.</p>
+    <div class="card-grid" style="margin-top: var(--space-5);">
+      {componentStates.cards.map((card) => (
+        <article class={card.class}>
+          <p class="meta">Component example</p>
+          <h3>{card.title}</h3>
+          <p>{card.description}</p>
+          <a href="#" class="card-link">Learn more</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Components</p>
+      <h2>Callouts</h2>
+    </div>
+    <p class="section-description">Attention-grabbing notices for important messages.</p>
+    <div class="callout-grid">
+      {componentStates.callouts.map((callout) => (
+        <div class={callout.class}>
+          <div class="callout-header">
+            <span class="callout-icon"></span>
+            <strong>{callout.title}</strong>
+          </div>
+          <p>{callout.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">States</p>
+      <h2>Empty States</h2>
+    </div>
+    <p class="section-description">Friendly messaging when there's no content to display.</p>
+    <div class="state-showcase-grid">
+      <div class="empty-state">
+        <div class="empty-state-icon">📝</div>
+        <h3>No posts yet</h3>
+        <p>Get started by creating your first blog post.</p>
+        <button class="button">Create post</button>
+      </div>
+      <div class="empty-state empty-state-compact">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No results found</h3>
+        <p>Try adjusting your search terms.</p>
+        <button class="button button-ghost">Clear filters</button>
+      </div>
+      <div class="empty-state empty-state-warm">
+        <div class="empty-state-icon">✨</div>
+        <h3>Coming soon</h3>
+        <p>This feature is under development.</p>
+        <a href="#">Get notified →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">States</p>
+      <h2>Loading States</h2>
+    </div>
+    <p class="section-description">Visual feedback during asynchronous operations.</p>
+    <div class="state-showcase-grid">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading content...</p>
+      </div>
+      <div class="loading-state loading-state-inline">
+        <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+      </div>
+      <div class="loading-state">
+        <div class="skeleton skeleton-card"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Patterns</p>
+      <h2>Interactive States</h2>
+    </div>
+    <p class="section-description">Hover, focus, active, and disabled states demonstrated.</p>
+    <div class="interactive-grid">
+      <div class="interactive-demo">
+        <p class="demo-label">Button hover/focus</p>
+        <div class="demo-area">
+          <button class="button">Hover over me</button>
+        </div>
+      </div>
+      <div class="interactive-demo">
+        <p class="demo-label">Card hover</p>
+        <div class="demo-area">
+          <div class="card card-interactive" style="padding: var(--space-4);">
+            <p class="meta">Interactive card</p>
+            <p>Hover to see elevation change</p>
+          </div>
+        </div>
+      </div>
+      <div class="interactive-demo">
+        <p class="demo-label">Link states</p>
+        <div class="demo-area">
+          <a href="#">Standard link</a>
+          <a href="#" class="link-warm">Warm accent link</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

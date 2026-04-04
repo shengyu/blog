@@ -14,7 +14,8 @@
     "preview": "astro preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "pnpm build && playwright test",
+    "test:e2e:server": "E2E_USE_SERVER=1 playwright test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.0.0",

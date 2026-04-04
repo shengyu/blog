@@ -5,6 +5,8 @@
 The project uses one selected stack for version 1: `Node.js LTS`, `Astro`, `pnpm`, plain scoped CSS, and `Vitest` plus `Playwright`.
 
 See [docs/setup.md](docs/setup.md) for the recorded decision and implementation direction.
+See [docs/content-format.md](docs/content-format.md) for the authoring format and
+[docs/storage.md](docs/storage.md) for the storage interface.
 
 ## Core Blog Functionalities
 

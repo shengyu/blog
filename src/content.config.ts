@@ -1,17 +1,16 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 
+import { blogPostSchema } from "./lib/blog-post-schema";
+
+/**
+ * Blog post content collection schema.
+ *
+ * Defines the validation rules for blog post frontmatter.
+ * See docs/content-format.md for the full authoring specification.
+ */
 const blog = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string().min(1),
-    publishDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "publishDate must be an ISO 8601 date string in YYYY-MM-DD format.",
-    }),
-    slug: z.string().regex(/^[a-z0-9-]+$/, {
-      message: "slug must contain only lowercase letters, numbers, and hyphens.",
-    }),
-    description: z.string().min(1),
-  }),
+  schema: blogPostSchema,
 });
 
 export const collections = { blog };
