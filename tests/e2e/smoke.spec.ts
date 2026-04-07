@@ -22,9 +22,10 @@ test("home page keeps the branded shell visible on desktop", async ({ page }) =>
     "Shared shell, responsive navigation",
   );
   await expect(
-    page.getByRole("heading", { name: "Initial blog scaffold" }),
+    page.getByRole("heading", { name: "Designed for deliberate reading" }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Browse posts" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Review style guide" })).toBeVisible();
 });
 
 test("article pages reuse the same shell on mobile widths", async ({ page }) => {
@@ -46,4 +47,22 @@ test("article pages reuse the same shell on mobile widths", async ({ page }) => 
   await expect(
     page.getByRole("heading", { name: "Welcome to the Blog" }),
   ).toBeVisible();
+});
+
+test("style guide publishes the review artifact for pages and components", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 960 });
+  await loadRoute(page, "/style-guide/");
+
+  await expect(page.getByRole("heading", { name: "Style guide" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "How to validate consistency" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Applied mockup set" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Buttons" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Callouts" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open route" }).first()).toBeVisible();
 });

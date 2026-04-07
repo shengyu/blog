@@ -2,6 +2,26 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { listBlogPosts, loadBlogPost } from "../../lib/blog-post-storage";
 
+function createDisplayDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(Date.UTC(year, month - 1, day, 12)));
+}
+
+function createPlainText(markdown: string) {
+  return markdown
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*]\([^)]+\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[#>*_\-\n]/g, " ");
+}
+
 export async function getStaticPaths() {
   const posts = await listBlogPosts();
 
@@ -23,6 +43,13 @@ if (!post) {
 }
 
 const { Content } = await post.render();
+const plainText = createPlainText(post.body);
+const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+const readingTimeMinutes = Math.max(1, Math.round(wordCount / 220));
+const publishDateLabel = createDisplayDate(post.publishDate);
+const updatedDateLabel = post.updatedDate
+  ? createDisplayDate(post.updatedDate)
+  : undefined;
 ---
 
 <BaseLayout
@@ -30,9 +57,42 @@ const { Content } = await post.render();
   description={post.description}
 >
   <article class="post">
-    <p class="meta">{post.publishDate}</p>
-    <h1>{post.title}</h1>
-    <p class="lede">{post.description}</p>
-    <Content />
+    <header class="post-header">
+      <p class="post-kicker">Reading room</p>
+      <h1 class="post-title">{post.title}</h1>
+      <p class="post-lede">{post.description}</p>
+
+      <dl class="post-meta-list">
+        <div>
+          <dt>Published</dt>
+          <dd>
+            <time datetime={post.publishDate}>{publishDateLabel}</time>
+          </dd>
+        </div>
+
+        {updatedDateLabel && (
+          <div>
+            <dt>Updated</dt>
+            <dd>
+              <time datetime={post.updatedDate}>{updatedDateLabel}</time>
+            </dd>
+          </div>
+        )}
+
+        <div>
+          <dt>Reading time</dt>
+          <dd>{readingTimeMinutes} min read</dd>
+        </div>
+
+        <div>
+          <dt>Length</dt>
+          <dd>{wordCount.toLocaleString()} words</dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="post-body">
+      <Content />
+    </div>
   </article>
 </BaseLayout>

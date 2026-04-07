@@ -1,5 +1,80 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { listBlogPosts } from "../lib/blog-post-storage";
+
+function createDisplayDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(Date.UTC(year, month - 1, day, 12)));
+}
+
+const posts = await listBlogPosts();
+const featuredPost = posts[0] ?? {
+  title: "Designed for deliberate reading",
+  description: "A warm editorial shell, restrained typography, and clear reading rhythm define the site direction.",
+  publishDate: "2026-04-01",
+};
+const archivePreview = posts.length
+  ? posts.slice(0, 3)
+  : [
+      featuredPost,
+      {
+        title: "Archive cards carry the same soft-surface system",
+        description: "Reusable card treatment keeps the archive aligned with the home and article layouts.",
+        publishDate: "2026-03-28",
+      },
+      {
+        title: "Metadata stays quiet so titles can lead scanning",
+        description: "Muted supporting details keep archive browsing focused and calm.",
+        publishDate: "2026-03-14",
+      },
+    ];
+
+const reviewHighlights = [
+  {
+    title: "Warm editorial shell",
+    description:
+      "Parchment backgrounds, frosted surfaces, and soft shadowing give every page a consistent reading-room frame.",
+  },
+  {
+    title: "Teal and clay accents",
+    description:
+      "Primary actions stay anchored in deep teal, while clay is reserved for supporting emphasis and warmth.",
+  },
+  {
+    title: "Serif-led hierarchy",
+    description:
+      "Display typography handles headlines and article titles, while the body stack keeps navigation and long-form copy readable.",
+  },
+];
+
+const liveRoutes = [
+  {
+    label: "Home",
+    href: "/",
+    title: "Homepage",
+    description:
+      "Validate the reading-room hero, primary action hierarchy, and latest-post handoff.",
+  },
+  {
+    label: "Blog archive",
+    href: "/blog/",
+    title: "Archive",
+    description:
+      "Validate repeated card treatment, quiet metadata, and browsing rhythm across the listing page.",
+  },
+  {
+    label: "Post detail",
+    href: featuredPost ? `/blog/${featuredPost.slug}/` : "/blog/",
+    title: "Article",
+    description:
+      "Validate immersive article framing, meta panels, and long-form content styling on a real post page.",
+  },
+];
 
 const componentStates = {
   buttons: [
@@ -99,16 +174,239 @@ const semanticTokens = [
 
 <BaseLayout
   title="Style guide | Blog"
-  description="Documented color tokens, typography scale, spacing rules, and UI token values for the blog."
+  description="Reviewable style guide and mockup set for the blog brand, showing the final visual direction across key pages and core components."
 >
   <section class="hero">
-    <p class="eyebrow">Brand foundation</p>
+    <p class="eyebrow">Review artifact</p>
     <h1>Style guide</h1>
     <p class="lede">
-      This page documents the reusable token set that powers the blog's visual
-      identity. The same values live in <code>src/styles/global.css</code> and
-      are applied across home, listing, and article pages.
+      This page packages the approved design decisions into a single review
+      surface. It documents the reusable token system and shows the final visual
+      direction applied to the home page, archive, post detail page, and core
+      interface components.
     </p>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Review checklist</p>
+      <h2>How to validate consistency</h2>
+    </div>
+    <p class="section-description">
+      Start on this page for the locked design decisions, then open the live
+      routes below to confirm the same visual system appears in production
+      templates.
+    </p>
+    <div class="card-grid">
+      {liveRoutes.map((route) => (
+        <article class="card">
+          <p class="meta">{route.label}</p>
+          <h3>{route.title}</h3>
+          <p>{route.description}</p>
+          <a class="card-link" href={route.href}>Open route</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Brand direction</p>
+      <h2>Locked visual decisions</h2>
+    </div>
+    <p class="section-description">
+      These are the decisions reviewers should see repeated across every page
+      mockup and every core component state.
+    </p>
+    <div class="card-grid">
+      {reviewHighlights.map((item, index) => (
+        <article class={index === 0 ? "card card-featured" : "card"}>
+          <p class="meta">Brand rule {index + 1}</p>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="style-guide-panel">
+    <div class="section-heading">
+      <p class="eyebrow">Main pages</p>
+      <h2>Applied mockup set</h2>
+    </div>
+    <p class="section-description">
+      Each frame below shows the branded shell, typography, spacing, and core
+      components working together on the primary page templates.
+    </p>
+
+    <div class="page-mockup-grid">
+      <article class="page-mockup">
+        <div class="page-mockup-copy">
+          <p class="token-chip">Home</p>
+          <h3>Landing page with hero and latest post</h3>
+          <p>
+            The homepage introduces the editorial tone immediately, then hands
+            off to the latest story using the shared card language.
+          </p>
+          <ul class="mockup-notes">
+            <li>Shared navigation shell anchors the brand before content.</li>
+            <li>Display headline and roomy lead copy establish the reading tone.</li>
+            <li>Primary and secondary actions show teal and neutral button hierarchy.</li>
+          </ul>
+        </div>
+
+        <div class="page-mockup-frame" aria-label="Homepage mockup">
+          <div class="page-mockup-bar">
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+          </div>
+          <div class="page-mockup-surface">
+            <div class="mock-nav">
+              <span class="mock-brand">Blog</span>
+              <div class="mock-nav-links">
+                <span class="mock-nav-pill mock-nav-pill-active">Home</span>
+                <span class="mock-nav-pill">Blog</span>
+                <span class="mock-nav-pill">Style guide</span>
+              </div>
+            </div>
+
+            <div class="mock-home-grid">
+              <div class="mock-home-hero">
+                <p class="eyebrow">Static-first publishing</p>
+                <h3>Warm editorial notes for deliberate readers</h3>
+                <p>
+                  The shell feels atmospheric without competing with the story.
+                  Accent color is reserved for the actions that move readers
+                  through the site.
+                </p>
+                <div class="button-row">
+                  <span class="button">Browse posts</span>
+                  <span class="button button-secondary">Read latest</span>
+                </div>
+              </div>
+
+              <div class="mock-mini-card">
+                <p class="meta">Latest post</p>
+                <h4>{featuredPost.title}</h4>
+                <p>{featuredPost.description}</p>
+                <div class="mock-meta-row">
+                  <span class="tag">Featured</span>
+                  <span class="mock-meta-chip">
+                    {createDisplayDate(featuredPost.publishDate)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="page-mockup">
+        <div class="page-mockup-copy">
+          <p class="token-chip">Blog archive</p>
+          <h3>Browseable list with consistent card hierarchy</h3>
+          <p>
+            The archive keeps scanning fast: metadata stays quiet, titles carry
+            the rhythm, and cards repeat the same surface treatment used
+            elsewhere.
+          </p>
+          <ul class="mockup-notes">
+            <li>Archive heading uses the same serif scale as the homepage.</li>
+            <li>Card borders, radius, and shadows match the global surface system.</li>
+            <li>Muted metadata supports browsing without overpowering titles.</li>
+          </ul>
+        </div>
+
+        <div class="page-mockup-frame" aria-label="Archive mockup">
+          <div class="page-mockup-bar">
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+          </div>
+          <div class="page-mockup-surface">
+            <div class="mock-archive-head">
+              <p class="eyebrow">Archive</p>
+              <h3>Blog posts</h3>
+              <p>Reverse-chronological cards keep discovery calm and readable.</p>
+            </div>
+
+            <div class="mock-card-grid">
+              {archivePreview.map((post, index) => (
+                <article class={index === 0 ? "mock-mini-card mock-mini-card-featured" : "mock-mini-card"}>
+                  <p class="meta">{createDisplayDate(post.publishDate)}</p>
+                  <h4>{post.title}</h4>
+                  <div class="mock-lines">
+                    <span class="mock-line"></span>
+                    <span class="mock-line mock-line-medium"></span>
+                    <span class="mock-line mock-line-short"></span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="page-mockup">
+        <div class="page-mockup-copy">
+          <p class="token-chip">Post detail</p>
+          <h3>Immersive article layout with measured reading width</h3>
+          <p>
+            Article pages push the editorial mood furthest: the title sits large
+            and close, metadata is surfaced in compact panels, and the prose
+            measure stays narrow enough for sustained reading.
+          </p>
+          <ul class="mockup-notes">
+            <li>Large display title creates a strong editorial entry point.</li>
+            <li>Meta panels reuse the glass surface treatment from the shell.</li>
+            <li>Body copy, blockquotes, and callouts inherit the same spacing rhythm.</li>
+          </ul>
+        </div>
+
+        <div class="page-mockup-frame" aria-label="Post detail mockup">
+          <div class="page-mockup-bar">
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+            <span class="page-mockup-dot"></span>
+          </div>
+          <div class="page-mockup-surface page-mockup-article">
+            <p class="mock-kicker">Reading room</p>
+            <h3 class="mock-article-title">{featuredPost.title}</h3>
+            <p class="mock-article-lede">{featuredPost.description}</p>
+
+            <div class="mock-meta-row">
+              <span class="mock-meta-chip">
+                Published {createDisplayDate(featuredPost.publishDate)}
+              </span>
+              <span class="mock-meta-chip">5 min read</span>
+              <span class="mock-meta-chip">1.1K words</span>
+            </div>
+
+            <div class="mock-lines">
+              <span class="mock-line"></span>
+              <span class="mock-line"></span>
+              <span class="mock-line mock-line-medium"></span>
+              <span class="mock-line"></span>
+              <span class="mock-line mock-line-short"></span>
+            </div>
+
+            <div class="mock-quote">
+              <p>
+                The visual system should feel warm and intentional without
+                becoming nostalgic or heavy.
+              </p>
+            </div>
+
+            <div class="mock-lines">
+              <span class="mock-line"></span>
+              <span class="mock-line"></span>
+              <span class="mock-line mock-line-medium"></span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
   </section>
 
   <section class="style-guide-panel">

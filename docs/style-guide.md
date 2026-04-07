@@ -2,6 +2,13 @@
 
 This document is the source of truth for the blog's visual identity system. The same values are defined in `src/styles/global.css` and applied site-wide.
 
+## Review Artifact
+
+- Published review surface: `/style-guide/`
+- Coverage: brand decisions, main page mockups for Home, Blog Archive, and Post Detail, plus the core component inventory.
+- Live review path: open the route cards in `/style-guide/` to compare the artifact against `/`, `/blog/`, and a real post page.
+- Review goal: confirm the same warm editorial direction, typography, color usage, and surface treatment repeat consistently across the key pages and reusable components.
+
 ## Brand Direction
 
 - Tone: warm, editorial, and restrained

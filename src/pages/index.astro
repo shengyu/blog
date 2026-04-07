@@ -2,23 +2,35 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { listBlogPosts } from "../lib/blog-post-storage";
 
+function createDisplayDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(Date.UTC(year, month - 1, day, 12)));
+}
+
 const posts = await listBlogPosts();
 const latestPost = posts[0];
 ---
 
 <BaseLayout
   title="Home | Blog"
-  description="A static-first Astro blog scaffold with repository-managed posts."
+  description="Warm editorial notes for deliberate readers, with a shared reading-room shell across the homepage, archive, and article pages."
 >
   <section class="hero">
-    <p class="eyebrow">Static-first publishing</p>
-    <h1>Initial blog scaffold</h1>
+    <p class="eyebrow">Warm editorial notes</p>
+    <h1>Designed for deliberate reading</h1>
     <p class="lede">
-      This project is ready for Astro page development, Markdown-backed posts,
-      and test wiring with Vitest plus Playwright.
+      The blog now follows a single editorial system: parchment surfaces, serif
+      hierarchy, restrained color accents, and roomy spacing tuned for calm
+      browsing and long-form reading.
     </p>
     <div class="actions">
       <a class="button" href="/blog/">Browse posts</a>
+      <a class="button button-secondary" href="/style-guide/">Review style guide</a>
     </div>
   </section>
 
@@ -27,12 +39,50 @@ const latestPost = posts[0];
       <div class="section-heading">
         <p class="eyebrow">Latest post</p>
         <h2>{latestPost.title}</h2>
+        <p class="section-description">
+          The homepage hands off directly to the newest story using the same
+          card language, metadata rhythm, and accent hierarchy documented in the
+          review artifact.
+        </p>
       </div>
-      <article class="card">
-        <p class="meta">{latestPost.publishDate}</p>
+      <article class="card card-featured">
+        <p class="meta">{createDisplayDate(latestPost.publishDate)}</p>
         <p>{latestPost.description}</p>
-        <a href={`/blog/${latestPost.slug}/`}>Read the article</a>
+        <a class="card-link" href={`/blog/${latestPost.slug}/`}>Read the article</a>
       </article>
     </section>
   )}
+
+  <section class="section-stack">
+    <div class="section-heading">
+      <p class="eyebrow">Review path</p>
+      <h2>Validate the system across the main surfaces</h2>
+      <p class="section-description">
+        Reviewers can move from the published style guide into the live routes
+        and confirm that the same shell, spacing, type hierarchy, and component
+        treatments repeat consistently.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <article class="card">
+        <p class="meta">Route</p>
+        <h3>Home</h3>
+        <p>Hero framing, primary and secondary actions, and the lead content handoff.</p>
+        <a class="card-link" href="/">Open homepage</a>
+      </article>
+      <article class="card">
+        <p class="meta">Route</p>
+        <h3>Blog archive</h3>
+        <p>Reverse-chronological cards, muted metadata, and repeatable browsing hierarchy.</p>
+        <a class="card-link" href="/blog/">Open archive</a>
+      </article>
+      <article class="card">
+        <p class="meta">Artifact</p>
+        <h3>Style guide and mockups</h3>
+        <p>Token decisions, page mockups, component inventory, and state coverage in one place.</p>
+        <a class="card-link" href="/style-guide/">Open style guide</a>
+      </article>
+    </div>
+  </section>
 </BaseLayout>
