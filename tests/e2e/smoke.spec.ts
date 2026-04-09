@@ -10,7 +10,7 @@ test("home page keeps the branded shell visible on desktop", async ({ page }) =>
   const primaryNav = page.getByRole("navigation", { name: "Primary navigation" });
   const footerNav = page.getByRole("navigation", { name: "Footer navigation" });
 
-  await expect(banner).toContainText("Warm editorial notes");
+  await expect(banner).toContainText("Modern tech journal");
   await expect(page.locator(".site-header")).toHaveCSS("flex-direction", "row");
   await expect(primaryNav.getByRole("link", { name: "Home" })).toHaveAttribute(
     "aria-current",
@@ -19,10 +19,12 @@ test("home page keeps the branded shell visible on desktop", async ({ page }) =>
   await expect(primaryNav.getByRole("link", { name: "Blog" })).toBeVisible();
   await expect(footerNav.getByRole("link", { name: "Style guide" })).toBeVisible();
   await expect(page.getByRole("contentinfo")).toContainText(
-    "Shared shell, responsive navigation",
+    "high-contrast reading surfaces",
   );
   await expect(
-    page.getByRole("heading", { name: "Designed for deliberate reading" }),
+    page.getByRole("heading", {
+      name: "Signal-first writing for engineering, systems, and AI work.",
+    }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Browse posts" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Review style guide" })).toBeVisible();

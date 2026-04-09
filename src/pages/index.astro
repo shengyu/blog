@@ -14,73 +14,109 @@ function createDisplayDate(value: string) {
 
 const posts = await listBlogPosts();
 const latestPost = posts[0];
+const recentPosts = posts.slice(1, 4);
 ---
 
 <BaseLayout
   title="Home | Blog"
-  description="Warm editorial notes for deliberate readers, with a shared reading-room shell across the homepage, archive, and article pages."
+  description="A minimalist blog with spacious layouts, refined typography, and elegant reading experience."
 >
-  <section class="hero">
-    <p class="eyebrow">Warm editorial notes</p>
-    <h1>Designed for deliberate reading</h1>
-    <p class="lede">
-      The blog now follows a single editorial system: parchment surfaces, serif
-      hierarchy, restrained color accents, and roomy spacing tuned for calm
-      browsing and long-form reading.
-    </p>
-    <div class="actions">
-      <a class="button" href="/blog/">Browse posts</a>
-      <a class="button button-secondary" href="/style-guide/">Review style guide</a>
+  <section class="hero hero-home">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Engineering & Design</p>
+        <h1>Thoughtful writing on systems, craft, and technology.</h1>
+        <p class="lede">
+          A spacious blog designed for focused reading. Expansive layouts,
+          refined typography, and a sophisticated light gray aesthetic that maximizes
+          the available space for an immersive reading experience.
+        </p>
+        <div class="actions">
+          <a class="button" href="/blog/">Browse posts</a>
+          <a class="button button-secondary" href="/style-guide/">
+            View style guide
+          </a>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Site overview">
+        <p class="meta">Overview</p>
+        <div class="signal-grid">
+          <article class="signal-card">
+            <p class="signal-label">Published</p>
+            <p class="signal-value">{posts.length.toString().padStart(2, "0")}</p>
+          </article>
+          <article class="signal-card">
+            <p class="signal-label">Latest</p>
+            <p class="signal-value">{latestPost ? latestPost.publishDate.slice(5) : "N/A"}</p>
+          </article>
+          <article class="signal-card signal-card-wide">
+            <p class="signal-label">Design</p>
+            <p class="signal-text">
+              Light gray theme with expansive layouts.
+            </p>
+          </article>
+        </div>
+      </aside>
     </div>
   </section>
 
   {latestPost && (
     <section class="section-stack">
-      <div class="section-heading">
-        <p class="eyebrow">Latest post</p>
-        <h2>{latestPost.title}</h2>
-        <p class="section-description">
-          The homepage hands off directly to the newest story using the same
-          card language, metadata rhythm, and accent hierarchy documented in the
-          review artifact.
-        </p>
+      <div class="story-grid">
+        <article class="card card-featured">
+          <p class="meta">{createDisplayDate(latestPost.publishDate)}</p>
+          <p class="card-kicker">Latest Post</p>
+          <h2>{latestPost.title}</h2>
+          <p>{latestPost.description}</p>
+          <a class="card-link" href={`/blog/${latestPost.slug}/`}>Read article</a>
+        </article>
+
+        <div class="story-rail">
+          <div class="rail-header">
+            <p class="eyebrow">Recent</p>
+          </div>
+          {recentPosts.map((post) => (
+            <article class="card card-compact">
+              <p class="meta">{createDisplayDate(post.publishDate)}</p>
+              <h3>{post.title}</h3>
+              <p>{post.description}</p>
+              <a class="card-link" href={`/blog/${post.slug}/`}>Read post</a>
+            </article>
+          ))}
+        </div>
       </div>
-      <article class="card card-featured">
-        <p class="meta">{createDisplayDate(latestPost.publishDate)}</p>
-        <p>{latestPost.description}</p>
-        <a class="card-link" href={`/blog/${latestPost.slug}/`}>Read the article</a>
-      </article>
     </section>
   )}
 
   <section class="section-stack">
-    <div class="section-heading">
-      <p class="eyebrow">Review path</p>
-      <h2>Validate the system across the main surfaces</h2>
+    <div class="section-header-row">
+      <div class="section-heading">
+        <p class="eyebrow">Navigation</p>
+        <h2>Explore the site</h2>
+      </div>
       <p class="section-description">
-        Reviewers can move from the published style guide into the live routes
-        and confirm that the same shell, spacing, type hierarchy, and component
-        treatments repeat consistently.
+        Three core sections designed for clarity and ease of use.
       </p>
     </div>
 
-    <div class="card-grid">
+    <div class="card-grid card-grid-3">
       <article class="card">
-        <p class="meta">Route</p>
+        <p class="meta">01</p>
         <h3>Home</h3>
-        <p>Hero framing, primary and secondary actions, and the lead content handoff.</p>
+        <p>Welcome page with featured content and navigation.</p>
         <a class="card-link" href="/">Open homepage</a>
       </article>
       <article class="card">
-        <p class="meta">Route</p>
+        <p class="meta">02</p>
         <h3>Blog archive</h3>
-        <p>Reverse-chronological cards, muted metadata, and repeatable browsing hierarchy.</p>
+        <p>Complete archive of all posts with clean layouts.</p>
         <a class="card-link" href="/blog/">Open archive</a>
       </article>
       <article class="card">
-        <p class="meta">Artifact</p>
-        <h3>Style guide and mockups</h3>
-        <p>Token decisions, page mockups, component inventory, and state coverage in one place.</p>
+        <p class="meta">03</p>
+        <h3>Style guide</h3>
+        <p>Design tokens, components, and visual patterns.</p>
         <a class="card-link" href="/style-guide/">Open style guide</a>
       </article>
     </div>

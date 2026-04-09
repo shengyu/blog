@@ -23,7 +23,10 @@ pnpm test
 # Run unit tests in watch mode
 pnpm test:watch
 
-# Build and run E2E tests (Playwright)
+# Run a single unit test file
+pnpm test -- tests/unit/blog-post-storage.spec.ts
+
+# Build and run E2E tests (Playwright) against static files
 pnpm test:e2e
 
 # Run E2E tests against running dev server

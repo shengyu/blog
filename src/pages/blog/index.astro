@@ -17,26 +17,27 @@ const posts = await listBlogPosts();
 
 <BaseLayout
   title="Blog | Blog"
-  description="Browse the blog archive in a warm editorial layout with consistent card hierarchy, muted metadata, and long-form reading cues."
+  description="Browse the complete archive of posts in a spacious layout designed for easy scanning and reading."
 >
   <section class="section-stack">
-    <div class="section-heading">
-      <p class="eyebrow">Reading room archive</p>
-      <h1>Browse the published notes</h1>
-      <p class="lede">
-        Reverse-chronological cards keep discovery calm and readable. The
-        archive reuses the same shell, spacing, and accent system as the home
-        page and article templates.
+    <div class="section-header-row">
+      <div class="section-heading">
+        <p class="eyebrow">Archive</p>
+        <h1>All posts</h1>
+      </div>
+      <p class="section-description">
+        Browse the complete collection. Each post is crafted for clarity and depth.
       </p>
     </div>
 
-    <div class="card-grid">
+    <div class="card-grid card-grid-archive">
       {posts.map((post, index) => (
         <article class={index === 0 ? "card card-featured" : "card"}>
           <p class="meta">{createDisplayDate(post.publishDate)}</p>
+          <p class="card-kicker">{index === 0 ? "Latest" : `${String(index + 1).padStart(2, "0")}`}</p>
           <h2>{post.title}</h2>
           <p>{post.description}</p>
-          <a class="card-link" href={`/blog/${post.slug}/`}>Read the article</a>
+          <a class="card-link" href={`/blog/${post.slug}/`}>Read article</a>
         </article>
       ))}
     </div>

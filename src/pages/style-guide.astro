@@ -14,8 +14,8 @@ function createDisplayDate(value: string) {
 
 const posts = await listBlogPosts();
 const featuredPost = posts[0] ?? {
-  title: "Designed for deliberate reading",
-  description: "A warm editorial shell, restrained typography, and clear reading rhythm define the site direction.",
+  title: "Modern interface, deliberate reading",
+  description: "A modern tech shell, luminous accents, and structured metadata define the site direction.",
   publishDate: "2026-04-01",
 };
 const archivePreview = posts.length
@@ -23,30 +23,30 @@ const archivePreview = posts.length
   : [
       featuredPost,
       {
-        title: "Archive cards carry the same soft-surface system",
+        title: "Archive cards carry the same panel system",
         description: "Reusable card treatment keeps the archive aligned with the home and article layouts.",
         publishDate: "2026-03-28",
       },
       {
-        title: "Metadata stays quiet so titles can lead scanning",
-        description: "Muted supporting details keep archive browsing focused and calm.",
+        title: "Metadata stays structured so titles can lead scanning",
+        description: "Support details stay crisp and readable without diluting the main hierarchy.",
         publishDate: "2026-03-14",
       },
     ];
 
 const reviewHighlights = [
   {
-    title: "Warm editorial shell",
+    title: "Modern tech shell",
     description:
-      "Parchment backgrounds, frosted surfaces, and soft shadowing give every page a consistent reading-room frame.",
+      "Deep contrast, luminous overlays, and glass panels give every page a consistent product-grade frame.",
   },
   {
-    title: "Teal and clay accents",
+    title: "Cyan and cobalt accents",
     description:
-      "Primary actions stay anchored in deep teal, while clay is reserved for supporting emphasis and warmth.",
+      "Primary actions stay anchored in cyan, while cobalt supports hierarchy and supporting emphasis.",
   },
   {
-    title: "Serif-led hierarchy",
+    title: "Geometric display hierarchy",
     description:
       "Display typography handles headlines and article titles, while the body stack keeps navigation and long-form copy readable.",
   },

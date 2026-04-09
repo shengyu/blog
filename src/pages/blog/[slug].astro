@@ -16,10 +16,33 @@ function createPlainText(markdown: string) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`[^`]*`/g, " ")
-    .replace(/!\[[^\]]*]\([^)]+\)/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/<[^>]+>/g, " ")
     .replace(/[#>*_\-\n]/g, " ");
+}
+
+function createReadingStats(markdown: string) {
+  const plainText = createPlainText(markdown).replace(/\s+/g, " ").trim();
+  const cjkMatches =
+    plainText.match(
+      /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu,
+    ) ?? [];
+  const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+  const characterCount = plainText.replace(/\s+/g, "").length;
+  const prefersCharacterMetrics = cjkMatches.length > 0 && cjkMatches.length >= wordCount;
+
+  if (prefersCharacterMetrics) {
+    return {
+      readingTimeMinutes: Math.max(1, Math.round(characterCount / 500)),
+      lengthLabel: `${characterCount.toLocaleString()} chars`,
+    };
+  }
+
+  return {
+    readingTimeMinutes: Math.max(1, Math.round(wordCount / 220)),
+    lengthLabel: `${wordCount.toLocaleString()} words`,
+  };
 }
 
 export async function getStaticPaths() {
@@ -43,9 +66,7 @@ if (!post) {
 }
 
 const { Content } = await post.render();
-const plainText = createPlainText(post.body);
-const wordCount = plainText.split(/\s+/).filter(Boolean).length;
-const readingTimeMinutes = Math.max(1, Math.round(wordCount / 220));
+const { readingTimeMinutes, lengthLabel } = createReadingStats(post.body);
 const publishDateLabel = createDisplayDate(post.publishDate);
 const updatedDateLabel = post.updatedDate
   ? createDisplayDate(post.updatedDate)
@@ -58,7 +79,7 @@ const updatedDateLabel = post.updatedDate
 >
   <article class="post">
     <header class="post-header">
-      <p class="post-kicker">Reading room</p>
+      <p class="post-kicker">Article</p>
       <h1 class="post-title">{post.title}</h1>
       <p class="post-lede">{post.description}</p>
 
@@ -86,7 +107,7 @@ const updatedDateLabel = post.updatedDate
 
         <div>
           <dt>Length</dt>
-          <dd>{wordCount.toLocaleString()} words</dd>
+          <dd>{lengthLabel}</dd>
         </div>
       </dl>
     </header>

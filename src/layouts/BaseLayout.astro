@@ -32,26 +32,26 @@ const canonical = Astro.site
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#e8e8e8" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <div class="site-shell">
+    <div class="site-wrapper">
       <header class="site-header">
-        <div class="site-brand-group">
+        <div class="site-header-inner">
           <a class="site-brand" href="/">Blog</a>
-          <p class="site-brand-note">Warm editorial notes</p>
+          <nav class="site-nav" aria-label="Primary navigation">
+            {navItems.map((item) => (
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
         </div>
-        <nav class="site-nav" aria-label="Primary navigation">
-          {navItems.map((item) => (
-            <a
-              href={item.href}
-              aria-current={isCurrent(item.href) ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
       </header>
 
       <main class="site-main">
@@ -59,24 +59,19 @@ const canonical = Astro.site
       </main>
 
       <footer class="site-footer">
-        <div class="site-footer-copy">
-          <p class="site-footer-label">Built for a warm editorial reading experience</p>
-          <p>
-            Shared shell, responsive navigation, and content pages rendered from
-            repository files.
-          </p>
+        <div class="site-footer-inner">
+          <p>Built with Astro. Designed for clarity.</p>
+          <nav class="site-footer-nav" aria-label="Footer navigation">
+            {navItems.map((item) => (
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
         </div>
-
-        <nav class="site-footer-nav" aria-label="Footer navigation">
-          {navItems.map((item) => (
-            <a
-              href={item.href}
-              aria-current={isCurrent(item.href) ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
       </footer>
     </div>
   </body>
