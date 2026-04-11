@@ -7,6 +7,11 @@ const { getCollectionMock, writeFileMock } = vi.hoisted(() => ({
 
 vi.mock("astro:content", () => ({
   getCollection: getCollectionMock,
+  render: vi.fn().mockResolvedValue({
+    Content: vi.fn(),
+    headings: [],
+    remarkPluginFrontmatter: {},
+  }),
 }));
 
 vi.mock("node:fs", () => ({

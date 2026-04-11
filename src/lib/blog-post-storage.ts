@@ -1,4 +1,9 @@
-import { getCollection, type CollectionEntry } from "astro:content";
+import {
+  getCollection,
+  render,
+  type CollectionEntry,
+  type RenderResult,
+} from "astro:content";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,7 +25,7 @@ export interface BlogPostSummary extends BlogPostFrontmatter {
 
 export interface BlogPostRecord extends BlogPostSummary {
   body: string;
-  render: BlogEntry["render"];
+  render: () => Promise<RenderResult>;
 }
 
 export interface BlogPostUpdate extends Partial<BlogPostFrontmatter> {
@@ -45,11 +50,11 @@ function toSummary(entry: BlogEntry): BlogPostSummary {
   };
 }
 
-function toRecord(entry: BlogEntry): BlogPostRecord {
+async function toRecord(entry: BlogEntry): Promise<BlogPostRecord> {
   return {
     ...toSummary(entry),
-    body: entry.body,
-    render: entry.render,
+    body: entry.body ?? "",
+    render: () => render(entry),
   };
 }
 
@@ -93,7 +98,7 @@ export async function loadBlogPost(slug: string) {
   const posts = await getSortedBlogEntries();
   const post = posts.find((entry) => entry.data.slug === slug);
 
-  return post ? toRecord(post) : undefined;
+  return post ? await toRecord(post) : undefined;
 }
 
 export async function updateBlogPost(currentSlug: string, update: BlogPostUpdate) {
@@ -109,7 +114,7 @@ export async function updateBlogPost(currentSlug: string, update: BlogPostUpdate
     ...post.data,
     ...frontmatterUpdate,
   });
-  const nextBody = body ?? post.body;
+  const nextBody = body ?? post.body ?? "";
 
   await fs.writeFile(
     resolveStoragePath(post),
@@ -120,7 +125,6 @@ export async function updateBlogPost(currentSlug: string, update: BlogPostUpdate
   return {
     ...nextFrontmatter,
     body: nextBody,
-    render: post.render,
     storagePath: resolveStoragePath(post),
   };
 }
